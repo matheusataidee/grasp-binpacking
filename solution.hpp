@@ -24,6 +24,8 @@ class Solution {
 
         void constructionPhase();
 
+        bool localSearch();
+
         bool check();
 
         int getScore();

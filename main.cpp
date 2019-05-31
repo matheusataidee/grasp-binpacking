@@ -32,6 +32,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < 500; i++) {
         Solution solution(n, alpha);
         solution.constructionPhase();
+        while (solution.localSearch());
         if (!solution.check()) {
             cout << "Error" << endl;
         }

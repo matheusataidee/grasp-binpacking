@@ -38,6 +38,54 @@ void Solution::constructionPhase() {
     }
 }
 
+bool Solution::localSearch() {
+    vector<pair<int, int> > v;
+    for (int i = 0; i < bins.size(); i++) {
+        v.push_back(make_pair(bins[i], i));
+    }
+    sort(v.begin(), v.end());
+    for (int i = 0; i < v.size(); i++) {
+        ll acc = 0;
+        int cur = 0;
+        bool cond = true;
+        for (int j = 0; cond && j < n; j++) {
+            if (aloc[j] == v[i].second) {
+                while (cur == i || acc + bins[v[cur].second] + items[j] > capacity) {
+                    cur++;
+                    acc = 0;
+                    if (cur == v.size()) {
+                        cond = false;
+                        break;
+                    }
+                }
+                acc += items[j];
+            }
+        }
+        if (cond) {
+            cur = 0;
+            for (int j = 0; j < n; j++) {
+                if (aloc[j] == v[i].second) {
+                    while (cur == i || bins[v[cur].second] + items[j] > capacity) {
+                        cur++;
+                        acc = 0;
+                    }
+                    aloc[j] = v[cur].second;
+                    bins[v[cur].second] += items[j];
+                }
+            }
+            for (int j = 0; j < n; j++) {
+                if (aloc[j] == bins.size() - 1) {
+                    aloc[j] = v[i].second;
+                }
+            }
+            swap(bins[v[i].second], bins[bins.size() - 1]);
+            bins.pop_back();
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Solution::check() {
     ll total_sum = 0;
     for (int i = 0; i < n; i++) {
