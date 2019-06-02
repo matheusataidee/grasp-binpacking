@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string.h>
 #include <vector>
+#include <chrono>
 
 #include "solution.hpp"
 
@@ -30,16 +31,26 @@ int main(int argc, char** argv) {
         fin >> x;
         items.push_back(x);
     }
-    ll best_solution = 0x7fffffff;
-    for (int i = 0; i < 500; i++) {
+    ll best_solution_cost = 0x7fffffff;
+    Solution best_solution(n, alpha);
+    int stopwatch= 0;
+    auto start = std::chrono::system_clock::now();
+    for (int i = 0; stopwatch < 600; i++) {
         Solution solution(n, alpha);
         solution.constructionPhase(pop);
         while (solution.localSearch());
         if (!solution.check()) {
             cout << "Error" << endl;
         }
-        best_solution = min(best_solution, (ll)solution.getScore());
+        auto end = std::chrono::system_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+        stopwatch = (int)elapsed.count();
+        if (solution.getScore() < best_solution_cost) {
+            cout << "Iteration: " << i << " Time in secs: " << stopwatch << " Score: " << solution.getScore() << endl;
+            best_solution_cost = (ll)solution.getScore();
+            best_solution = solution;
+        }
     }
-    cout << "Best Solution size = " << best_solution << endl;
+    cout << "Best Solution size = " << best_solution_cost << endl;
     return 0;
 }
