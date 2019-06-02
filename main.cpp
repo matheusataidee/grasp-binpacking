@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <string.h>
 #include <vector>
 
 #include "solution.hpp"
@@ -13,16 +14,17 @@ int n;
 double alpha;
 ll capacity;
 vector<ll> items;
+bool pop = false; // Proximate Optimality Principle
 
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        cout << "Usage: " << argv[0] << " <Instance> <Alpha>" << endl;
+    if (argc < 4) {
+        cout << "Usage: " << argv[0] << " <Instance> <Alpha> <POP>" << endl;
         return -1;
     }
     alpha = atof(argv[2]);
     ifstream fin(argv[1]);
+    pop = strcmp(argv[3], "1") == 0;
     fin >> n >> capacity;
-    cout << n << " " << capacity << endl;
     for (int i = 0; i < n; i++) {
         ll x;
         fin >> x;
@@ -31,7 +33,7 @@ int main(int argc, char** argv) {
     ll best_solution = 0x7fffffff;
     for (int i = 0; i < 500; i++) {
         Solution solution(n, alpha);
-        solution.constructionPhase();
+        solution.constructionPhase(pop);
         while (solution.localSearch());
         if (!solution.check()) {
             cout << "Error" << endl;

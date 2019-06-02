@@ -22,7 +22,7 @@ class Solution {
     public:
         Solution(int sz, double _alpha);
 
-        void constructionPhase();
+        void constructionPhase(bool pop);
 
         bool localSearch();
 

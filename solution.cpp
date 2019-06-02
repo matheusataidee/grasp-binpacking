@@ -6,7 +6,7 @@ Solution::Solution(int sz, double _alpha) {
     aloc = vector<int>(n, -1);
 }
 
-void Solution::constructionPhase() {
+void Solution::constructionPhase(bool pop) {
     for (int i = 0; i < n; i++) {
         vector<pair<ll, int> > v;
         v.push_back(make_pair(capacity - items[i], bins.size()));
@@ -35,6 +35,9 @@ void Solution::constructionPhase() {
             bins[v[choosen].second] += items[i];
         }
         aloc[i] = v[choosen].second;
+        if (pop && (i == (2 * (n / 5)) || i == (4 * (n / 5)))) {
+            while (localSearch());
+        } 
     }
 }
 
